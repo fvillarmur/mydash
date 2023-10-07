@@ -1,8 +1,9 @@
 """home"""
-import dash
 from dash import html, dcc, callback, Input, Output
 
-dash.register_page(__name__)
+def go_analytics():
+    """go analytics"""
+    return layout
 
 layout = html.Div([
     html.H1('This is our Analytics page'),
@@ -17,7 +18,6 @@ layout = html.Div([
     html.Br(),
     html.Div(id='analytics-output'),
 ])
-
 
 @callback(
     Output('analytics-output', 'children'),

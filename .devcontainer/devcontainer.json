@@ -14,7 +14,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "pip install dash; pip install pandas; python --version",
+	"postCreateCommand": "pip install dash; pip install pandas; pip install dash-bootstrap-components; pip install dash-bootstrap-templates; python --version",
 	"customizations": {
 		"vscode": {
 			"extensions": [
