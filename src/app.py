@@ -15,25 +15,18 @@ app = dash.Dash(__name__, external_scripts=[
 ],
     external_stylesheets=[
     dbc.themes.COSMO,
-    dbc.icons.FONT_AWESOME
+    dbc.icons.FONT_AWESOME,
+    '/assets/style.css'
 ],
     suppress_callback_exceptions=True)
 
 content = dbc.Card(
     [
-        dbc.Row(
+        dbc.CardBody(
             [
-                dbc.Col(
-                    dbc.CardBody(
-                        [
-                            html.Div(id="page-content")
-                        ]
-                    ),
-                    className="col-md-8",
-                ),
-            ],
-            className="g-0 d-flex align-items-center",
-        )
+                html.Div(id="page-content")
+            ]
+        ),
     ],
     className="mt-3 card shadow-lg p-3 mb-5 bg-body rounded"
 )
