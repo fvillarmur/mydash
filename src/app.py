@@ -5,26 +5,29 @@ from flask import send_from_directory
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
 from navbar import get_navbar
-from pages.analytics import go_analytics
+from pages.about import go_about
+from pages.algorithm import go_algorithm
 from pages.home import go_home
 from pages.interpolation import go_interpolation
+from pages.simpson import go_simpson
 
-app = dash.Dash(__name__, external_scripts=[
-    'https://polyfill.io/v3/polyfill.min.js?features=es6',
-    'https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/tex-mml-chtml.js'
-],
-    external_stylesheets=[
-    dbc.themes.COSMO,
-    dbc.icons.FONT_AWESOME,
-    '/assets/style.css'
-],
-    suppress_callback_exceptions=True)
+app = dash.Dash(__name__,
+                external_stylesheets=[
+                    dbc.themes.COSMO,
+                    dbc.icons.FONT_AWESOME,
+                    '''
+                    https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,
+                    wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap
+                    ''',
+                    '/assets/style.css'
+                ],
+                suppress_callback_exceptions=True)
 
 content = dbc.Card(
     [
         dbc.CardBody(
             [
-                html.Div(id="page-content")
+                html.Div(dcc.Loading(id='page-content'))
             ]
         ),
     ],
@@ -34,17 +37,25 @@ content = dbc.Card(
 app.layout = dbc.Container(
     [dcc.Location(id="url"), get_navbar(), content])
 
+
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
     """render page content"""
     if pathname == "/":
         return go_home()
 
-    if pathname == "/analytics":
-        return go_analytics()
+    if pathname == "/simpson":
+        return go_simpson()
 
     if pathname == "/interpolation":
         return go_interpolation()
+
+    if pathname == "/algorithm":
+        return go_algorithm()
+
+    if pathname == "/about":
+        return go_about()
+
     # If the user tries to reach a different page, return a 404 message
     return html.Div(
         [
@@ -55,11 +66,13 @@ def render_page_content(pathname):
         className="p-3 bg-light rounded-3",
     )
 
+
 @app.server.route('/assets/<path:path>')
 def static_file(path):
     """serve static"""
     static_folder = os.path.join(os.getcwd(), 'assets')
     return send_from_directory(static_folder, path)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,10 +1,16 @@
 html *
 {
-    font-family: "Roboto";
+    font-family: 'Roboto Condensed', sans-serif;
     font-weight: normal;
 }
 
 p
 {
     text-align: justify;
+}
+
+.myMath
+{
+    overflow-x: auto;
+    overflow-y: hidden;
 }

@@ -8,16 +8,18 @@ theme_switch = ThemeSwitchAIO(
 
 navbar = dbc.NavbarSimple(
     children=[
-        dbc.NavItem(dbc.NavLink("Home", href="/")),
-        dbc.NavItem(dbc.NavLink("interpolation", href="/interpolation")),
-        dbc.NavItem(dbc.NavLink("analytics", href="/analytics")),
+        dbc.NavItem(dbc.NavLink("Sinopsis", href="/about")),
+        dbc.NavItem(dbc.NavLink("Interpolación", href="/interpolation")),
+        dbc.NavItem(dbc.NavLink("Simpson 1/3", href="/simpson")),
+        dbc.NavItem(dbc.NavLink("Algoritmo", href="/algorithm")),
         dbc.NavItem(dbc.NavLink(theme_switch))
     ],
-    brand="NavbarSimple",
-    brand_href="#",
+    brand="Probabilidad Gaussiana",
+    brand_href="/",
     color="secondary",
     dark=True,
 )
+
 
 def get_navbar():
     """get navbar"""
