@@ -1,66 +1,122 @@
 """home"""
 from dash import html, dcc, callback, Input, Output
+import dash_bootstrap_components as dbc
 import numpy as np
+import dash_daq as daq
+import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 from dash_bootstrap_templates import ThemeSwitchAIO
 
 SEGMENTS = 200000
 
-layout = html.Div([
-    html.H1('This is our Home page'),
-    html.Div('This is our Home page content.'),
-    dcc.Input(id='limit_inf', value=0, type='number'),
-    dcc.Input(id='limit_sup', value=0, type='number'),
-    dcc.Input(id='mean', value=0, type='number'),
-    dcc.Input(id='sigma', value=1, type='number'),
-    html.Br(),
-    html.Div(id='result'),
-    html.Div(dcc.Graph(id="theme-switch-graph", mathjax=True), className="m-4")
-])
+form = dbc.Form([
+    dbc.Row(
+        [
+            dbc.Label(dcc.Markdown('$\\mu$',mathjax=True), width="auto"),
+            dbc.Col(
+                daq.NumericInput(
+                    id='mean',
+                    min=-1000000,
+                    max=1000000,
+                    value=10,
+                    size=100
+                ),
+            ),
+            dbc.Label(dcc.Markdown('$\\sigma$',mathjax=True), width="auto"),
+            dbc.Col(
+                daq.NumericInput(
+                    id='sigma',
+                    min=1,
+                    max=1000000,
+                    value=1,
+                    size=100
+                )
+            )
+        ],
+    ),
+    dbc.Row(
+        [
+            dbc.Col(
+                daq.NumericInput(
+                    id='limit_inf',
+                    min=-1000000,
+                    max=1000000,
+                    value=2,
+                    size=100
+                )
+            ),
+            dbc.Col(dbc.Label(dcc.Markdown('$\\geq x \\leq$',mathjax=True), width="auto")),
+            dbc.Col(
+                daq.NumericInput(
+                    id='limit_sup',
+                    min=-1000000,
+                    max=1000000,
+                    value=4,
+                    size=100
+                )
+            )
+        ]
+    ),
+   ]
+)
 
+layout = html.Div([
+    form,
+    html.Br(),
+    html.Div([
+        html.Div('0'),
+        html.Div(dcc.Graph(id="theme-switch-graph", mathjax=True))
+    ], id='result'),
+])
 
 @callback(
     Output('result', 'children'),
+    Input(ThemeSwitchAIO.ids.switch("theme"), "value"),
     Input('limit_inf', 'value'),
     Input('limit_sup', 'value'),
     Input('mean', 'value'),
     Input('sigma', 'value')
 )
-def simpson_gauss(limit_inf, limit_sup, mean, sigma):
-    "método de simpson 1/3 para distribución gauss"
+def update_graph(toggle, limit_inf, limit_sup, mean, sigma):
+    """update graph"""
     if (not isinstance(limit_inf, (int, float, complex)) or
         not isinstance(limit_sup, (int, float, complex)) or
         not isinstance(mean, (int, float, complex)) or
         not isinstance(sigma, (int, float, complex))):
         return 0
-
-    array_fx = function_evaluation(limit_inf, limit_sup)
-    return simpson_multiple(array_fx, limit_inf, limit_sup)
-
-# https://dash.plotly.com/advanced-callbacks
-
-
-@callback(
-    Output("theme-switch-graph", "figure"),
-    Input(ThemeSwitchAIO.ids.switch("theme"), "value"),
-)
-def update_graph(toggle):
-    """update graph"""
-    template = "cosmo" if toggle else "darkly"
-    fig = px.line(x=[1, 2, 3, 4], y=[1, 4, 9, 16],
-                  title=r'$\alpha_{1c} = 352 \pm 11 \text{ km s}^{-1}$',
-                  template=template)
-    fig.update_layout(
-        xaxis_title=r'$\sqrt{(n_\text{c}(t|{T_\text{early}}))}$',
-        yaxis_title=r'$d, r \text{ (solar radius)}$'
-    )
-    return fig
-
-
-def function_evaluation(limit_inf, limit_sup):
-    """function evaluation"""
+    
     array_x = np.linspace(limit_inf, limit_sup, SEGMENTS)
-    return array_x**2
+    array_fx = function_evaluation(array_x, sigma, mean)
+    result = simpson_multiple(array_fx, limit_inf, limit_sup)
+
+    segments_graphs = 1000
+    array_x_graph = np.linspace(limit_inf - 2*limit_inf, limit_sup + 2*limit_sup, segments_graphs)
+    array_fx_graph = function_evaluation(array_x_graph, sigma, mean)
+
+    array_x_area_graph = np.linspace(limit_inf, limit_sup, segments_graphs)
+    array_fx_area_graph = function_evaluation(array_x_area_graph, sigma, mean)
+
+    template = "cosmo" if toggle else "darkly"
+    fig_function = px.line(x=array_x_graph, y=array_fx_graph,
+                  title=r'$\alpha_{1c} = 352 \pm 11 \text{ km s}^{-1}$')
+
+    fig_area = px.area(x = array_x_area_graph, y = array_fx_area_graph)
+    
+    final_figure = go.Figure(data= fig_function.data + fig_area.data)
+
+    final_figure.update_layout(template = template, 
+        xaxis_title=r'$\sqrt{(n_\text{c}(t|{T_\text{early}}))}$',
+        yaxis_title=r'$d, r \text{ (solar radius)}$')
+    
+    return [
+        html.Div(f'''{result}'''),
+        html.Div(dcc.Graph(id="theme-switch-graph", figure=final_figure, mathjax=True))]
+
+def function_evaluation(array_x, sigma, mean):
+    """function evaluation"""
+    fx = (1/(sigma * (2*np.pi)**.5))*np.exp(-.5*( ((array_x - mean) / sigma )**2 ) )
+    return fx
 
 
 def simpson_multiple(array_fx, limit_inf, limit_sup):
