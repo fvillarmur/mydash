@@ -2,60 +2,60 @@
 from dash import html, dcc, callback, Input, Output
 import dash_bootstrap_components as dbc
 import numpy as np
-import dash_daq as daq
-import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from dash_bootstrap_templates import ThemeSwitchAIO
+from dash_daq import NumericInput as daqNumericInput
 
 SEGMENTS = 200000
+daqNumericInput: callable
+
+mean_input = daqNumericInput(
+                id='mean',
+                min=-1000000,
+                max=1000000,
+                value=10,
+                size=100
+            )
+
+sigma_input = daqNumericInput(
+                id='sigma',
+                min=1,
+                max=1000000,
+                value=1,
+                size=100
+            )
+
+limit_inf_input = daqNumericInput(
+                id='limit_inf',
+                min=-1000000,
+                max=1000000,
+                value=2,
+                size=100
+            )
+
+limit_sup_input = daqNumericInput(
+                id='limit_sup',
+                min=-1000000,
+                max=1000000,
+                value=4,
+                size=100
+            )
 
 form = dbc.Form([
     dbc.Row(
         [
             dbc.Label(dcc.Markdown('$\\mu$',mathjax=True), width="auto"),
-            dbc.Col(
-                daq.NumericInput(
-                    id='mean',
-                    min=-1000000,
-                    max=1000000,
-                    value=10,
-                    size=100
-                ),
-            ),
+            dbc.Col(mean_input),
             dbc.Label(dcc.Markdown('$\\sigma$',mathjax=True), width="auto"),
-            dbc.Col(
-                daq.NumericInput(
-                    id='sigma',
-                    min=1,
-                    max=1000000,
-                    value=1,
-                    size=100
-                )
-            )
+            dbc.Col(sigma_input)
         ],
     ),
     dbc.Row(
         [
-            dbc.Col(
-                daq.NumericInput(
-                    id='limit_inf',
-                    min=-1000000,
-                    max=1000000,
-                    value=2,
-                    size=100
-                )
-            ),
+            dbc.Col(limit_inf_input),
             dbc.Col(dbc.Label(dcc.Markdown('$\\geq x \\leq$',mathjax=True), width="auto")),
-            dbc.Col(
-                daq.NumericInput(
-                    id='limit_sup',
-                    min=-1000000,
-                    max=1000000,
-                    value=4,
-                    size=100
-                )
-            )
+            dbc.Col(limit_sup_input)
         ]
     ),
    ]
@@ -85,7 +85,7 @@ def update_graph(toggle, limit_inf, limit_sup, mean, sigma):
         not isinstance(mean, (int, float, complex)) or
         not isinstance(sigma, (int, float, complex))):
         return 0
-    
+
     array_x = np.linspace(limit_inf, limit_sup, SEGMENTS)
     array_fx = function_evaluation(array_x, sigma, mean)
     result = simpson_multiple(array_fx, limit_inf, limit_sup)
@@ -102,13 +102,13 @@ def update_graph(toggle, limit_inf, limit_sup, mean, sigma):
                   title=r'$\alpha_{1c} = 352 \pm 11 \text{ km s}^{-1}$')
 
     fig_area = px.area(x = array_x_area_graph, y = array_fx_area_graph)
-    
+
     final_figure = go.Figure(data= fig_function.data + fig_area.data)
 
-    final_figure.update_layout(template = template, 
+    final_figure.update_layout(template = template,
         xaxis_title=r'$\sqrt{(n_\text{c}(t|{T_\text{early}}))}$',
         yaxis_title=r'$d, r \text{ (solar radius)}$')
-    
+
     return [
         html.Div(f'''{result}'''),
         html.Div(dcc.Graph(id="theme-switch-graph", figure=final_figure, mathjax=True))]
