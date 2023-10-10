@@ -6,19 +6,15 @@ import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
 from navbar import get_navbar
 from pages.about import go_about
-from pages.algorithm import go_algorithm
 from pages.home import go_home
 from pages.interpolation import go_interpolation
+from pages.reference import go_reference
 from pages.simpson import go_simpson
 
 app = dash.Dash(__name__,
                 external_stylesheets=[
                     dbc.themes.COSMO,
                     dbc.icons.FONT_AWESOME,
-                    '''
-                    https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,
-                    wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap
-                    ''',
                     '/assets/style.css'
                 ],
                 suppress_callback_exceptions=True)
@@ -50,8 +46,8 @@ def render_page_content(pathname):
     if pathname == "/interpolation":
         return go_interpolation()
 
-    if pathname == "/algorithm":
-        return go_algorithm()
+    if pathname == "/reference":
+        return go_reference()
 
     if pathname == "/about":
         return go_about()

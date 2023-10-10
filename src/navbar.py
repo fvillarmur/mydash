@@ -11,7 +11,7 @@ navbar = dbc.NavbarSimple(
         dbc.NavItem(dbc.NavLink("Sinopsis", href="/about")),
         dbc.NavItem(dbc.NavLink("Interpolación", href="/interpolation")),
         dbc.NavItem(dbc.NavLink("Simpson 1/3", href="/simpson")),
-        dbc.NavItem(dbc.NavLink("Algoritmo", href="/algorithm")),
+        dbc.NavItem(dbc.NavLink("Referencias", href="/reference")),
         dbc.NavItem(dbc.NavLink(theme_switch))
     ],
     brand="Probabilidad Gaussiana",

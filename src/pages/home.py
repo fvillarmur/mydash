@@ -5,74 +5,68 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 from dash_bootstrap_templates import ThemeSwitchAIO
-from dash_daq import NumericInput as daqNumericInput
 
 SEGMENTS = 200000
 SEGMENTS_GRAPHS = 1000
-daqNumericInput: callable
 
-mean_input = daqNumericInput(
-    id='mean',
+mean_input = dcc.Input(
+    id="mean",
+    type="number",
+    placeholder="Media",
+    debounce=True,
     value=0,
-    min=-1000000,
-    max=1000000,
-    size=100,
-    persistence_type=True
+    className='form-control',
+    required=True
 )
 
-sigma_input = daqNumericInput(
-    id='sigma',
+sigma_input = dcc.Input(
+    id="sigma",
+    type="number",
+    placeholder="Desviación estándar",
+    debounce=True,
     value=1,
-    min=1,
-    max=1000000,
-    size=100
+    min=.00001,
+    className='form-control',
+    required=True
 )
 
-limit_inf_input = daqNumericInput(
-    id='limit_inf',
-    value=-4,
-    min=-1000000,
-    max=1000000,
-    size=100
+limit_inf_input = dcc.Input(
+    id="limit_inf",
+    type="number",
+    placeholder="Límite inferior",
+    debounce=True,
+    value=-5,
+    size='10',
+    className='form-control',
+    required=True
 )
 
-limit_sup_input = daqNumericInput(
-    id='limit_sup',
+limit_sup_input = dcc.Input(
+    id="limit_sup",
+    type="number",
+    placeholder="Límite superior",
+    debounce=True,
     value=0,
-    min=-1000000,
-    max=1000000,
-    size=100
+    className='form-control',
+    required=True
 )
 
-form = dbc.Form([
-    dbc.Row(
-        [
-            dbc.Label(dcc.Markdown('$\\mu$', mathjax=True), width="auto"),
-            dbc.Col(mean_input),
-            dbc.Label(dcc.Markdown('$\\sigma$', mathjax=True), width="auto"),
-            dbc.Col(sigma_input)
-        ],
-    ),
-    dbc.Row(
-        [
-            dbc.Col(limit_inf_input),
-            dbc.Col(dbc.Label(dcc.Markdown(
-                '$\\geq x \\leq$', mathjax=True), width="auto")),
-            dbc.Col(limit_sup_input)
-        ]
-    ),
-]
-)
+row1 = html.Tr([html.Td(dcc.Markdown('$\\mu$', mathjax=True)), html.Td(mean_input),
+                html.Td(dcc.Markdown('$\\sigma$', mathjax=True)), html.Td(sigma_input)])
+row2 = html.Tr([html.Td("Límite inferior"), html.Td(limit_inf_input),
+                html.Td("Límite superior"), html.Td(limit_sup_input)])
+
+table_body = [html.Tbody([row1, row2])]
+
+table = dbc.Table( table_body, bordered=True, size='sm', responsive=True)
 
 layout = html.Div([
-    form,
+    table,
     html.Br(),
     html.Div([
-        html.Div('0'),
         html.Div(dcc.Graph(id="theme-switch-graph", mathjax=True))
     ], id='result'),
 ])
-
 
 @callback(
     Output('result', 'children'),
@@ -93,6 +87,18 @@ def update_graph(toggle, limit_inf, limit_sup, mean, sigma):
     if limit_inf >= limit_sup:
         return html.Div('Límite superior tiene que ser mayor que el inferior.')
 
+    final_figure = create_final_figure(sigma, mean, limit_inf ,limit_sup, toggle)
+
+    return [
+        html.Div(dcc.Graph(id="theme-switch-graph", figure=final_figure, mathjax=True))]
+
+
+def go_home():
+    """home layout"""
+    return layout
+
+def create_final_figure(sigma, mean, limit_inf ,limit_sup, toggle):
+    """creates final figure"""
     array_x = np.linspace(limit_inf, limit_sup, SEGMENTS)
     array_fx = function_evaluation(array_x, sigma, mean)
     result = simpson_multiple(array_fx, limit_inf, limit_sup)
@@ -103,13 +109,13 @@ def update_graph(toggle, limit_inf, limit_sup, mean, sigma):
     fig_area = create_fig_area(limit_inf, limit_sup, sigma, mean)
     final_figure = go.Figure(data=fig_function.data + fig_area.data)
 
-    final_figure.update_layout(template=template,
-                               xaxis_title=r'$\sqrt{(n_\text{c}(t|{T_\text{early}}))}$',
-                               yaxis_title=r'$d, r \text{ (solar radius)}$')
+    final_figure.update_layout(
+        template=template,
+        title=f'''$$P({limit_inf} \\geq x \\leq {limit_sup}) = {result}$$''',
+        xaxis_title=f'$\\sigma = {sigma}; \\mu = {mean}$',
+        yaxis_title=r'$f(x) = N(\mu, \sigma^2)$')
 
-    return [
-        html.Div(f'''{result}'''),
-        html.Div(dcc.Graph(id="theme-switch-graph", figure=final_figure, mathjax=True))]
+    return final_figure
 
 
 def create_fig_function(sigma, mean):
@@ -118,8 +124,7 @@ def create_fig_function(sigma, mean):
     array_x_graph = np.linspace(
         mean - sigma_times*sigma, mean + sigma_times*sigma, SEGMENTS_GRAPHS)
     array_fx_graph = function_evaluation(array_x_graph, sigma, mean)
-    return px.line(x=array_x_graph, y=array_fx_graph,
-                   title=r'$\alpha_{1c} = 352 \pm 11 \text{ km s}^{-1}$')
+    return px.line(x=array_x_graph, y=array_fx_graph)
 
 
 def create_fig_area(limit_inf, limit_sup, sigma, mean):
@@ -149,8 +154,3 @@ def simpson_multiple(array_fx, limit_inf, limit_sup):
     _h = (limit_sup - limit_inf)/(3*SEGMENTS)
 
     return _h*total_sum
-
-
-def go_home():
-    """home layout"""
-    return layout
