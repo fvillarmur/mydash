@@ -10,18 +10,20 @@ Se consideran, 200000 segmentos
 https://github.com/fvillarmur/mydash/blob/e0a5a3be21c6d7b4cdbdad80ba1f077ec2a4598f/src/pages/home.py#L9
 
 Usando la libreria numpy, partimos el espacio x en 200000 segmentos iguales
-https://github.com/fvillarmur/mydash/blob/e0a5a3be21c6d7b4cdbdad80ba1f077ec2a4598f/src/pages/home.py#L102C3-L104C62
+https://github.com/fvillarmur/mydash/blob/e0a5a3be21c6d7b4cdbdad80ba1f077ec2a4598f/src/pages/home.py#L102-L104
 
-Usando las capacidades de álgebra lineal, de numpy,
+Usando las capacidades de álgebra lineal de numpy,
 https://github.com/fvillarmur/mydash/blob/e0a5a3be21c6d7b4cdbdad80ba1f077ec2a4598f/src/pages/home.py#L137-L141
-ahí se escribe la ecuación normal y se evalua para cada valor del array_x, mean es la media y sigma la desviación estándar.
+Se escribe la ecuación normal y se evalua para cada valor del array_x, mean es la media y sigma la desviación estándar.
 
 https://github.com/fvillarmur/mydash/blob/e0a5a3be21c6d7b4cdbdad80ba1f077ec2a4598f/src/pages/home.py#L144-L156
 
-Por último el método de simpson, de inicio se excluye el primero y el último.
-de ese array_fx, partimos los pares y los impares. De acuerdo a la ecuación, los pares se suman *2 y los impares *4.
+Por último el método de simpson, al inicio se excluye el primero y el último elemento de array_fx.
+Partimos los pares y los impares. De acuerdo a la ecuación, los pares se suman *2 y los impares *4.
 
-np.sum, permite sumar todos los elementos de un numpy array, se suma todo incluyendo el 1ero y el último elemento de array_fx.
+np.sum, permite sumar todos los elementos de un numpy array. 
+
+Se suma todo incluyendo el 1ero y el último elemento de array_fx.
 
 _h representa la fracción que multiplica a la sumatoria.
 
