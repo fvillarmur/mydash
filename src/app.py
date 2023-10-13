@@ -5,11 +5,11 @@ from flask import send_from_directory
 import dash_bootstrap_components as dbc
 from dash import Input, Output, dcc, html
 from navbar import get_navbar
+from pages.simpson import go_simpson
 from pages.about import go_about
 from pages.home import go_home
 from pages.interpolation import go_interpolation
 from pages.reference import go_reference
-from pages.simpson import go_simpson
 
 app = dash.Dash(__name__,
                 external_stylesheets=[
