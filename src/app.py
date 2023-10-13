@@ -17,9 +17,12 @@ app = dash.Dash(__name__,
                     dbc.icons.FONT_AWESOME,
                     '/assets/style.css'
                 ],
-                suppress_callback_exceptions=True)
+                suppress_callback_exceptions=True,
+                meta_tags=[
+                    {"name": "viewport", "content": "width=device-width, initial-scale=1"}
+                ])
 
-content = dbc.Card(
+content=dbc.Card(
     [
         dbc.CardBody(
             [
@@ -30,11 +33,11 @@ content = dbc.Card(
     className="mt-3 card shadow-lg p-3 mb-5 bg-body rounded"
 )
 
-app.layout = dbc.Container(
-    [dcc.Location(id="url"), get_navbar(), content], fluid=True ,className='container-lg')
+app.layout=dbc.Container(
+    [dcc.Location(id="url"), get_navbar(), content], fluid=True, className='container-lg')
 
 
-@app.callback(Output("page-content", "children"), [Input("url", "pathname")])
+@ app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def render_page_content(pathname):
     """render page content"""
     if pathname == "/":
@@ -63,10 +66,10 @@ def render_page_content(pathname):
     )
 
 
-@app.server.route('/assets/<path:path>')
+@ app.server.route('/assets/<path:path>')
 def static_file(path):
     """serve static"""
-    static_folder = os.path.join(os.getcwd(), 'assets')
+    static_folder=os.path.join(os.getcwd(), 'assets')
     return send_from_directory(static_folder, path)
 
 
