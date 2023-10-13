@@ -59,10 +59,19 @@ table = dbc.Table(table_body, bordered=True, size='sm', responsive=True)
 
 layout = html.Div([
     table,
-    html.Br(),
     html.Div([
         html.Div(dcc.Graph(id="theme-switch-graph", mathjax=True))
     ], id='result'),
+    dcc.Markdown('''$$
+        \\begin{equation}
+        f(x) = \\frac{1}{\\sigma \\sqrt{2 \\pi}} e^{- \\frac{1}{2} \\frac{(x - \\mu)^2}{\\sigma^2}}
+        \\end{equation}   
+        $$''', mathjax=True, className="myMath"),
+    dcc.Markdown('''$$
+        \\begin{equation}
+        P(x_{0} \\geq x \\leq x_{n}) = \\int_{x_{0}}^{x_{n}} f(x) dx
+        \\end{equation}   
+        $$''', mathjax=True, className="myMath")
 ])
 
 

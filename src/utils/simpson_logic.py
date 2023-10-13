@@ -61,6 +61,6 @@ def create_final_figure(sigma, mean, limit_inf, limit_sup, toggle):
         template=template,
         title=f'''$$P({limit_inf} \\geq x \\leq {limit_sup}) = {result}$$''',
         xaxis_title=f'$\\sigma = {sigma}; \\mu = {mean}$',
-        yaxis_title=r'$f(x) = N(\mu, \sigma^2)$')
+        yaxis_title=r'$f(x)$')
 
     return final_figure
