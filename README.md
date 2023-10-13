@@ -4,7 +4,7 @@ python app.py
 
 # Se implemento el método de simpson 1/3, para el caso de una distribución de probabilidad normal
 
-<img width="436" alt="image" src="https://github.com/fvillarmur/mydash/assets/142535134/91aa03d9-55ee-43b1-9527-01f087729bfc">
+<img width="443" alt="image" src="https://github.com/fvillarmur/mydash/assets/142535134/f92767d8-824a-4866-85bc-fe37dea34f4c">
 
 Se consideran, 200000 segmentos 
 https://github.com/fvillarmur/mydash/blob/4ddf810d80908ca30f3e2304d288a94ab7cdb430/src/utils/simpson_logic.py#L6
