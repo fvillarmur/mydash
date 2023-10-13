@@ -1,7 +1,8 @@
-para ejecutar, desde la carpeta src, en consola,
+Para ejecutar, desde la carpeta src, en consola,
+
 python app.py
 
-#Se implemento el método de simpson 1/3, para el caso de una distribución de probabilidad normal
+# Se implemento el método de simpson 1/3, para el caso de una distribución de probabilidad normal
 
 <img width="436" alt="image" src="https://github.com/fvillarmur/mydash/assets/142535134/91aa03d9-55ee-43b1-9527-01f087729bfc">
 
@@ -26,4 +27,4 @@ Se suma todo incluyendo el 1ero y el último elemento de array_fx.
 
 _h representa la fracción que multiplica a la sumatoria.
 
-Dando así, la aproximación, de la integral de la integral de la distribución gaussiana con el método de simpson 1/3 
+Dando así, la aproximación, de la integral de la distribución gaussiana con el método de simpson 1/3.
