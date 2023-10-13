@@ -31,7 +31,7 @@ content = dbc.Card(
 )
 
 app.layout = dbc.Container(
-    [dcc.Location(id="url"), get_navbar(), content])
+    [dcc.Location(id="url"), get_navbar(), content], fluid=True ,className='container-lg')
 
 
 @app.callback(Output("page-content", "children"), [Input("url", "pathname")])
