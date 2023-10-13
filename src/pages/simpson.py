@@ -9,9 +9,9 @@ def latext(text):
 
 layout = html.Div([
     html.H3('Regla de Simpson 1/3'),
-    html.P('''La regla de Simpson 1/3 es un método de integración numperica,
+    html.P('''La regla de Simpson 1/3 es un método de integración numérica,
             donde la idea es aproximar una función usando un
-            polinomio de interpolación de Lagrange de segundo grado,'''),
+            polinomio de interpolación de Lagrange de segundo grado (Chapra & Canale, 2007),'''),
     latext('''$$
             \\begin{equation}
             I = \\int_{a}^{b} f(x) dx \\cong \\int_{a}^{b} f_{2}(x) dx
@@ -116,10 +116,10 @@ layout = html.Div([
                 I = (x_2 - x_0) \\frac{f(x_{0}) + 4 f(x_{1}) + f(x_{2})}{6}
                \\end{equation}
                $$'''),
-    html.P('La ecuación (2) es conocida como la regla de Simpson 1/3'),
-    html.H3('Regla de simpson 1/3 con aplicación múltiple'),
+    html.P('La ecuación (2) es conocida como la regla de Simpson 1/3 (Chapra & Canale, 2007).'),
+    html.H3('Regla de Simpson 1/3 con aplicación múltiple'),
     html.P('''Este método es más exacto, porque divide el intervalo de
-               integración en segmentos de un mismo tamaño,'''),
+               integración en segmentos de un mismo tamaño (Chapra & Canale, 2007),'''),
     latext('''$$
             \\begin{equation}
             h = \\frac{x_n - x_0}{n}
@@ -147,7 +147,7 @@ layout = html.Div([
             I = \\int_{x_{0}}^{x_2} f(x) dx + \\int_{x_{2}}^{x_4} f(x) dx + \\ldots + \\int_{x_{n}}^{x_{n-2}} f(x) dx
             \\end{equation}
             $$'''),
-    html.P('aplicando la regla de simpson 1/3 (ecuación 2) a cada integral'),
+    html.P('aplicando la regla de Simpson 1/3 (ecuación 2) a cada integral,'),
     latext('$\\therefore$'),
     latext('''$$
             \\begin{align}
@@ -155,15 +155,17 @@ layout = html.Div([
             & + \\ldots + 2h \\frac{f(x_{n-2}) + 4f(x_{n-1}) + f(x_{n})}{6}
             \\end{align}
             $$'''),
-    latext('''dada la naturaleza de esta serie, los terminos impares están multiplicados
-               por 4 y los pares cuentan por 2. Sustituyendo $h$ se llega a,'''),
+    latext('''dada la naturaleza de esta serie, los términos impares están multiplicados
+              por 4 y los pares cuentan por 2 (Chapra & Canale, 2007). 
+              Sustituyendo $h$ se llega a,'''),
     latext('''$$
             \\begin{equation}
-            I \\cong (x_n - x_0) \\left[ \\frac{f(x_0) + 4 \\sum_{i = 1,3,5...}^{n-1} f(x_{i}) + \\sum_{j = 2,4,6...}^{n-2} f(x_{j}) + f(x_n)}{3n} \\right]
+            I \\cong (x_n - x_0) \\left[ \\frac{f(x_0) + 4 \\sum_{i = 1,3,5...}^{n-1} f(x_{i}) + 2 \\sum_{j = 2,4,6...}^{n-2} f(x_{j}) + f(x_n)}{3n} \\right]
             \\end{equation}
             $$'''),
     html.P(
-        '''Esta ecuación es conocida como la regla de Simpson 1/3 de aplicación múltiple.''')
+        '''Esta ecuación es conocida como la regla de Simpson 1/3 de 
+        aplicación múltiple (Chapra & Canale, 2007).''')
 ])
 
 

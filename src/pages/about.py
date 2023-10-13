@@ -4,12 +4,10 @@ from dash import html, dcc
 layout = html.Div([
     html.P('''El método de integración numérica Simpson 1/3 con aplicación múltiple,
         es implementado para el caso de una distribución normal.'''),
-    html.P('''La distribución normal es trascendental por sus diversas
-           aplicaciones en estadística.'''),
     html.P('''En este contexto, la integral de la distribución normal es relevante,
-           dado que no tiene solución analitica.'''),
+           dado que no tiene solución analítica  (Bertsekas & Tsitsiklis, 2008).'''),
     html.P('''Esta integral representa la probabilidad de la variable aleatoria x
-           dentro de un intervalo.'''),
+           dentro de un intervalo (Bertsekas & Tsitsiklis, 2008).'''),
     dcc.Markdown('''$$
                 \\begin{equation}
                 f(x) = \\frac{1}{\\sigma \\sqrt{2 \\pi}} e^{-\\frac{1}{2} \\frac{(x - \\mu)^2}{\\sigma^2}}

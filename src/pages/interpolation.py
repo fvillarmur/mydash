@@ -10,7 +10,7 @@ def latext(text):
 layout = html.Div([
     html.H3('Interpolación'),
     latext('''
-            Dados $n+1$ puntos, hay un solo polinomio de grado $n$ que pasa a traves de todos los puntos.
+            Dados $n+1$ puntos, hay un solo polinomio de grado $n$ que pasa a través de todos los puntos.
             Por ejemplo, si se trata de dos puntos, para unirlos necesitas una línea recta. 
             En otras palabras, necesitas un polinomio de grado uno para unir dos puntos.
             La forma general de un polinomio de n-ésimo grado es,
@@ -23,10 +23,11 @@ layout = html.Div([
             $$'''),
     latext('''
             La interpolación polinomial consiste en encontrar un polinomio de grado $n$ que una $n+1$ puntos.
-            Existen distintas formas de calcular este polinomio. Entre ellas, el polinomio de interpolación de Newton y el polinomio de interpolacion de Lagrange.
+            Existen distintas formas de calcular este polinomio.
+            Entre ellas, el polinomio de interpolación de Newton y el polinomio de interpolación de Lagrange (Chapra & Canale, 2007).
             '''),
     html.H3('Forma general de los polinomios de interpolación de Newton'),
-    html.P('La forma general corresponde a,'),
+    html.P('La forma general corresponde a (Chapra & Canale, 2007),'),
     latext('''$$
             \\begin{equation}
             \\tag{2}
@@ -57,7 +58,7 @@ layout = html.Div([
             b_{n} &= f[x_{n},x_{n-1},\\ldots,x_{1},x_{0}] \\tag{5}
             \\end{align}
             $$'''),
-    html.P('''las evaluaciones de las funciones entre corchetes,
+    html.P('''las evaluaciones de las funciones entre corchetes
                son las diferencias divididas finitas.
                La primera diferencia finita dividida,'''),
     latext('''$$
@@ -73,7 +74,7 @@ layout = html.Div([
             f[x_{i},x_{j},x_{k}] = \\frac{f[x_{i},x_{j}] - f[x_{j},x_{k}] }{x_{i}-x_{k}}
             \\end{equation}
             $$'''),
-    html.P('por lo tanto, la n-ésima diferencia dividida finita es,'),
+    html.P('por lo tanto, la n-ésima diferencia dividida finita es (Chapra & Canale, 2007),'),
     latext('''$$
             \\begin{equation}
             \\tag{8}
@@ -92,7 +93,7 @@ layout = html.Div([
     html.P('''
             El polinomio de interpolación de Lagrange es una reformulación del polinomio de interpolación de Newton, 
             donde se evita el cálculo de las diferencias divididas.
-            El polinomio de Lagrange es definido como,
+            El polinomio de Lagrange es definido como (Chapra & Canale, 2007),
             '''),
     latext('''$$
             \\begin{equation}
@@ -100,7 +101,6 @@ layout = html.Div([
             f_{n}(x) = \\sum_{i=0}^{n} L_{i}(x) f(x_{i})
             \\end{equation}
             $$'''),
-    html.P('donde'),
     latext('''$$
             \\begin{equation}
             \\tag{11}
@@ -108,7 +108,7 @@ layout = html.Div([
             \\end{equation}
             $$'''),
     latext('''donde, $\\prod$ representa multiplicaciones sucesivas.
-               Por lo tanto para la versión $n = 1$,'''),
+               Por lo tanto, para la versión $n = 1$,'''),
     latext('''$$
             \\begin{equation}
             \\tag{12}
@@ -125,11 +125,11 @@ layout = html.Div([
             \\end{align}
             $$'''),
     latext('''
-            La ecuación (13) se conoce como el polinomio de  interpolación de Lagrange de grado 2. 
+            La ecuación (13) se conoce como el polinomio de  interpolación de Lagrange de grado 2 (Chapra & Canale, 2007). 
             El cual, une los tres puntos, $[x_{0}, f(x_{0})],[x_{1}, f(x_{1})],[x_{2}, f(x_{2})]$
             '''),
     latext('''
-            A continuación se probara, que a partir del polinomio de interpolación de Newton es posible 
+            A continuación, se probará que a partir del polinomio de interpolación de Newton es posible 
             deducir el polinomio de interpolación de Lagrange.
             '''),
     html.P('Para probar el origen de (12), se considera la ecuación (6),'),
@@ -198,7 +198,7 @@ layout = html.Div([
             &+ (x-x_{0})(x-x_{1}) \\left[ \\frac{f(x_{2})}{(x_{2}-x_{1})(x_{2}-x_{0})} + \\frac{f(x_{1})}{(x_1-x_2)(x_{1}-x_{0})} + \\frac{f(x_{0})}{(x_{2}-x_{0})(x_{1}-x_{0})} \\right] \\tag{19}
             \\end{align}
             $$'''),
-    latext('''Se van a analizar los terminos de (19) por partes,
+    latext('''Se van a analizar los términos de (19) por partes,
                agrupando lo relacionado a $f(x_0)$'''),
     latext('''$$
             \\begin{align}
@@ -212,7 +212,7 @@ layout = html.Div([
             & \\frac{(x-x_1)(x-x_{2}) }{(x_{0}-x_{2})(x_0 - x_1)}f(x_{0}) \\tag{20}
             \\end{align}
             $$'''),
-    latext('Analizando los terminos relacionados a $f(x_1)$'),
+    latext('Analizando los términos relacionados a $f(x_1)$'),
     latext('''$$
             \\begin{align}
             & \\frac{f(x_{1})(x - x_0)}{x_1 - x_0} \\left[ 1 + \\frac{x-x_1}{x_1-x_2} \\right] \\\\
@@ -220,7 +220,7 @@ layout = html.Div([
             & \\frac{(x-x_2)(x - x_0)}{(x_1 - x_0)(x_1-x_2)} f(x_1) \\tag{21}
             \\end{align}
             $$'''),
-    latext('Por último, los terminos relacionados a $f(x_2)$,'),
+    latext('Por último, los términos relacionados a $f(x_2)$,'),
     latext('''$$
             \\begin{equation}
             \\frac{(x-x_{0})(x-x_{1})}{(x_{2}-x_{1})(x_{2}-x_{0})} f(x_{2}) \\tag{22}
